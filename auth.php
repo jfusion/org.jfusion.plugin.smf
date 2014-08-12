@@ -9,7 +9,6 @@
  * @link       http://www.jfusion.org
  */
 
-use JFusion\Plugin\Plugin_Auth;
 use JFusion\User\Userinfo;
 
 /**
@@ -23,7 +22,7 @@ use JFusion\User\Userinfo;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU/GPL
  * @link       http://www.jfusion.org
  */
-class Auth extends Plugin_Auth
+class Auth extends \JFusion\Plugin\Auth
 {
     /**
      * Generate a encrypted password from clean password

@@ -16,7 +16,6 @@
 
 use JFusion\Factory;
 use JFusion\Framework;
-use JFusion\Plugin\Plugin_Admin;
 
 use Joomla\Language\Text;
 
@@ -38,7 +37,7 @@ use stdClass;
  * @link       http://www.jfusion.org
  */
 
-class Admin extends Plugin_Admin
+class Admin extends \JFusion\Plugin\Admin
 {
     /**
      * return table name

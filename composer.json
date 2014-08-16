@@ -1,10 +1,18 @@
 {
     "name": "jfusion/plugin-smf",
-    "type": "jfusion-plugin-smf",
+    "type": "jfusion-plugin",
     "description": "Plugin for smf jfusion framework",
-    "keywords": ["jfusion", "plugin", "smf", "framework"],
-    "homepage": "https://github.com/jfusion/org.jfusion.plugin.smf",
+    "keywords": ["jfusion", "plugin", "smf"],
+    "homepage": "http://jfusion.org",
     "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Morten Hundevad",
+            "email": "fannoj@gmail.com",
+            "homepage": "http://fanno.dk",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": ">=5.3.10"
     },

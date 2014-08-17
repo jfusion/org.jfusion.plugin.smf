@@ -14,13 +14,14 @@ use JFusion\Framework;
 use JFusion\User\Userinfo;
 use JFusion\Plugin\Platform\Joomla;
 
+use Joomla\Filesystem\File;
 use Joomla\Language\Text;
+use Joomla\Registry\Registry;
 use Joomla\Uri\Uri;
 
 use Psr\Log\LogLevel;
 
 use JFactory;
-use JFile;
 use JFusionFunction;
 
 use RuntimeException;
@@ -151,7 +152,7 @@ class Platform extends Joomla
 
         $query = array(
         //LAT with first post info
-        LAT . '0' =>
+		self::LAT . '0' =>
         "(SELECT a.ID_TOPIC AS threadid, a.ID_LAST_MSG AS postid, b.posterName AS username, d.realName AS name, b.ID_MEMBER AS userid, b.subject AS subject, b.posterTime AS dateline, a.ID_BOARD as forumid, c.posterTime as last_post_date
             FROM `#__topics` as a
                 INNER JOIN `#__messages` as b ON a.ID_FIRST_MSG = b.ID_MSG
@@ -166,7 +167,7 @@ class Platform extends Joomla
                 $where $guest_where)
         ORDER BY last_post_date $end",
         //LAT with latest post info
-        LAT . '1' =>
+	    self::LAT . '1' =>
         "(SELECT a.ID_TOPIC AS threadid, a.ID_LAST_MSG AS postid, b.posterName AS username, d.realName as name, b.ID_MEMBER AS userid, c.subject AS subject, b.posterTime AS dateline, a.ID_BOARD as forumid, b.posterTime as last_post_date
             FROM `#__topics` as a
                 INNER JOIN `#__messages` as b ON a.ID_LAST_MSG = b.ID_MSG
@@ -181,14 +182,14 @@ class Platform extends Joomla
                 $where $guest_where)
         ORDER BY last_post_date $end",
         //LCT
-        LCT =>
+	    self::LCT =>
         "(SELECT a.ID_TOPIC AS threadid, b.ID_MSG AS postid, b.posterName AS username, d.realName as name, b.ID_MEMBER AS userid, b.subject AS subject, b.body, b.posterTime AS dateline, a.ID_BOARD as forumid, b.posterTime as topic_date
             FROM `#__topics` as a
                 INNER JOIN `#__messages` as b ON a.ID_FIRST_MSG = b.ID_MSG
                 INNER JOIN `#__messages` as c ON a.ID_LAST_MSG = c.ID_MSG
                 INNER JOIN `#__members`  as d ON b.ID_MEMBER = d.ID_MEMBER
                 $where)
-       UNION
+		UNION
             (SELECT a.ID_TOPIC AS threadid, b.ID_MSG AS postid, b.posterName AS username, b.posterName as name, b.ID_MEMBER AS userid, b.subject AS subject, b.body, b.posterTime AS dateline, a.ID_BOARD as forumid, b.posterTime as topic_date
             FROM `#__topics` as a
                 INNER JOIN `#__messages` as b ON a.ID_FIRST_MSG = b.ID_MSG
@@ -196,7 +197,7 @@ class Platform extends Joomla
                 $where $guest_where)
         ORDER BY topic_date $end",
         //LCP
-        LCP => "
+		self::LCP => "
         (SELECT b.ID_TOPIC AS threadid, b.ID_MSG AS postid, b.posterName AS username, d.realName as name, b.ID_MEMBER AS userid, b.subject AS subject, b.body, b.posterTime AS dateline, b.ID_BOARD as forumid, b.posterTime as last_post_date
             FROM `#__messages` as b
                 INNER JOIN `#__members` as d ON b.ID_MEMBER = d.ID_MEMBER
@@ -1214,14 +1215,13 @@ if (!defined(\'_JEXEC\') && strpos($_SERVER[\'QUERY_STRING\'], \'dlattach\') ===
 			case 'disable':
 				if ($error == 0) {
 					//get the joomla path from the file
-					jimport('joomla.filesystem.file');
 					$file_data = file_get_contents($mod_file);
 					$search = '/(\r?\n)\/\/JFUSION REDIRECT START(.*)\/\/JFUSION REDIRECT END/si';
 					preg_match_all($search, $file_data, $matches);
 					//remove any old code
 					if (!empty($matches[1][0])) {
 						$file_data = preg_replace($search, '', $file_data);
-						if (!JFile::write($mod_file, $file_data)) {
+						if (!File::write($mod_file, $file_data)) {
 							$error = 1;
 						}
 					}
@@ -1242,7 +1242,6 @@ if (!defined(\'_JEXEC\') && strpos($_SERVER[\'QUERY_STRING\'], \'dlattach\') ===
 					Framework::raise(LogLevel::WARNING, Text::_('MISSING') . ' ItemID ' . Text::_('MUST BE') . ' ' . $this->getJname(), $this->getJname(), $this->getJname());
 				} else if($error == 0) {
 					//get the joomla path from the file
-					jimport('joomla.filesystem.file');
 					$file_data = file_get_contents($mod_file);
 					$redirect_code = $this->generateRedirectCode($joomla_url, $joomla_itemid);
 
@@ -1250,7 +1249,7 @@ if (!defined(\'_JEXEC\') && strpos($_SERVER[\'QUERY_STRING\'], \'dlattach\') ===
 					$replace = '<?php' . $redirect_code;
 
 					$file_data = preg_replace($search, $replace, $file_data);
-					JFile::write($mod_file, $file_data);
+					File::write($mod_file, $file_data);
 				}
 				break;
 		}
@@ -1581,7 +1580,7 @@ HTML;
 			Framework::raise(LogLevel::WARNING, 'Could not find SMF in the specified directory', $this->getJname());
 		}
 		$document = JFactory::getDocument();
-		$document->addScript(JFusionFunction::getJoomlaURL() . JFUSION_PLUGIN_DIR_URL . $this->getJname() . '/js/script.js');
+		$document->addScript(JFusionFunction::getJoomlaURL() . JFUSION_PLUGIN_DIR_URL . $this->getName() . '/js/script.js');
 	}
 
 	/**

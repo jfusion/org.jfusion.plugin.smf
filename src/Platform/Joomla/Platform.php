@@ -283,7 +283,7 @@ class Platform extends Joomla
 					    $query = $db->getQuery(true)
 						    ->select('ID_MSG, ID_TOPIC')
 						    ->from('#__log_topics')
-						    ->where('ID_MEMBER = ' . $userlookup->userid);
+						    ->where('ID_MEMBER = ' . (int)$userlookup->userid);
 
 					    $db->setQuery($query);
 					    $markread['topic'] = $db->loadObjectList('ID_TOPIC');
@@ -291,7 +291,7 @@ class Platform extends Joomla
 					    $query = $db->getQuery(true)
 						    ->select('ID_MSG, ID_BOARD')
 						    ->from('#__log_mark_read')
-						    ->where('ID_MEMBER = ' . $userlookup->userid);
+						    ->where('ID_MEMBER = ' . (int)$userlookup->userid);
 
 					    $db->setQuery($query);
 					    $markread['mark_read'] = $db->loadObjectList('ID_BOARD');
@@ -299,7 +299,7 @@ class Platform extends Joomla
 					    $query = $db->getQuery(true)
 						    ->select('ID_MSG, ID_BOARD')
 						    ->from('#__log_boards')
-						    ->where('ID_MEMBER = ' . $userlookup->userid);
+						    ->where('ID_MEMBER = ' . (int)$userlookup->userid);
 
 					    $db->setQuery($query);
 					    $markread['board'] = $db->loadObjectList('ID_BOARD');
@@ -365,7 +365,7 @@ class Platform extends Joomla
 		        $query = $db->getQuery(true)
 			        ->select('unreadMessages')
 			        ->from('#__members')
-			        ->where('ID_MEMBER = ' . $userid);
+			        ->where('ID_MEMBER = ' . (int)$userid);
 
 		        $db->setQuery($query);
 		        $unreadCount = $db->loadResult();
@@ -374,7 +374,7 @@ class Platform extends Joomla
 		        $query = $db->getQuery(true)
 			        ->select('instantMessages')
 			        ->from('#__members')
-			        ->where('ID_MEMBER = ' . $userid);
+			        ->where('ID_MEMBER = ' . (int)$userid);
 
 		        $db->setQuery($query);
 		        $totalCount = $db->loadResult();
@@ -405,7 +405,7 @@ class Platform extends Joomla
 			    $query = $db->getQuery(true)
 				    ->select('*')
 				    ->from('#__members')
-				    ->where('ID_MEMBER = ' . $userid);
+				    ->where('ID_MEMBER = ' . (int)$userid);
 
 			    $db->setQuery($query);
 			    $db->execute();
@@ -416,7 +416,7 @@ class Platform extends Joomla
 				    $query = $db->getQuery(true)
 					    ->select('*')
 					    ->from('#__attachments')
-					    ->where('ID_MEMBER = ' . $userid);
+					    ->where('ID_MEMBER = ' . (int)$userid);
 
 				    $db->setQuery($query);
 				    $db->execute();
@@ -479,7 +479,7 @@ class Platform extends Joomla
 	    $query = $db->getQuery(true)
 		    ->select('memberName, emailAddress')
 		    ->from('#__members')
-		    ->where('ID_MEMBER = ' . $userid);
+		    ->where('ID_MEMBER = ' . (int)$userid);
 
 	    $db->setQuery($query);
 	    $smfUser = $db->loadObject();
@@ -539,7 +539,7 @@ class Platform extends Joomla
 		    ->select('m.posterTime')
 		    ->from('#__messages as m')
 		    ->innerJoin('#__boards AS b ON b.ID_LAST_MSG = m.ID_MSG')
-		    ->where('b.ID_BOARD = ' . $forumid);
+		    ->where('b.ID_BOARD = ' . (int)$forumid);
 
 	    $db->setQuery($query);
 	    $lastPostTime = (int)$db->loadResult();
@@ -557,7 +557,7 @@ class Platform extends Joomla
 	    $query = $db->getQuery(true)
 		    ->select('numTopics, numPosts')
 		    ->from('#__boards')
-		    ->where('ID_BOARD = ' . $forumid);
+		    ->where('ID_BOARD = ' . (int)$forumid);
 
 	    $db->setQuery($query);
 	    $num = $db->loadObject();
@@ -609,7 +609,7 @@ class Platform extends Joomla
 	    $query = $db->getQuery(true)
 		    ->select('memberName')
 		    ->from('#__members')
-		    ->where('ID_MEMBER = ' . $userid);
+		    ->where('ID_MEMBER = ' . (int)$userid);
 
 	    $db->setQuery($query);
 	    $smfUser = $db->loadObject();
@@ -635,7 +635,7 @@ class Platform extends Joomla
     function createQuickReply(&$dbparams, $showGuestInputs)
     {
         $html = '';
-	    $mainframe = Factory::getApplication();
+	    $mainframe = Application::getInstance();
         if ($showGuestInputs) {
             $username = $mainframe->input->post->get('guest_username', '');
             $email = $mainframe->input->post->get('guest_email', '');
@@ -727,7 +727,7 @@ HTML;
 			    ->select('t.ID_FIRST_MSG , t.numReplies, m.subject')
 			    ->from('#__messages as m')
 			    ->innerJoin('#__topics as t ON t.ID_TOPIC = m.ID_TOPIC')
-			    ->where('t.ID_TOPIC = ' . $ids->threadid)
+			    ->where('t.ID_TOPIC = ' . (int)$ids->threadid)
 			    ->where('m.ID_MSG = t.ID_FIRST_MSG');
 
 		    $db->setQuery($query);
@@ -741,7 +741,7 @@ HTML;
 			    $query = $db->getQuery(true)
 				    ->select('memberName, emailAddress')
 				    ->from('#__members')
-				    ->where('ID_MEMBER = ' . $userid);
+				    ->where('ID_MEMBER = ' . (int)$userid);
 
 			    $db->setQuery($query);
 			    $smfUser = $db->loadObject();
@@ -785,7 +785,7 @@ HTML;
 		    $query = $db->getQuery(true)
 			    ->select('numPosts')
 			    ->from('#__boards')
-			    ->where('ID_BOARD = ' . $ids->forumid);
+			    ->where('ID_BOARD = ' . (int)$ids->forumid);
 
 		    $db->setQuery($query);
 		    $num = $db->loadObject();
@@ -853,7 +853,7 @@ HTML;
 		    $query = $db->getQuery(true)
 			    ->select('numReplies')
 			    ->from('#__topics')
-			    ->where('ID_TOPIC = ' . $existingthread->threadid);
+			    ->where('ID_TOPIC = ' . (int)$existingthread->threadid);
 
 		    $db->setQuery($query);
 		    $result = $db->loadResult();
@@ -909,7 +909,7 @@ HTML;
 		    $query = $db->getQuery(true)
 			    ->select('ID_TOPIC AS threadid, ID_BOARD AS forumid, ID_FIRST_MSG AS postid')
 			    ->from('#__topics')
-			    ->where('ID_TOPIC = ' . $threadid);
+			    ->where('ID_TOPIC = ' . (int)$threadid);
 
 		    $db->setQuery($query);
 		    $results = $db->loadObject();
@@ -931,7 +931,7 @@ HTML;
 		    $query = $db->getQuery(true)
 			    ->select('locked')
 			    ->from('#__topics')
-			    ->where('ID_TOPIC = ' . $threadid);
+			    ->where('ID_TOPIC = ' . (int)$threadid);
 
 		    $db->setQuery($query);
 		    $locked = $db->loadResult();
@@ -966,13 +966,13 @@ HTML;
 		if(!empty($usergroups)) {
 			if(is_array($usergroups)) {
 				$usergroups_string = implode(',', $usergroups);
-				$usergroup_query = '(u.ID_GROUP IN (' . $usergroups_string . ') OR u.ID_POST_GROUP IN (' . $usergroups_string . ')';
+				$usergroup_query = '(u.ID_GROUP IN (' . $db->quote($usergroups_string) . ') OR u.ID_POST_GROUP IN (' . $db->quote($usergroups_string) . ')';
 				foreach($usergroups AS $usergroup) {
 					$usergroup_query .= ' OR FIND_IN_SET(' . intval($usergroup) . ', u.additionalGroups)';
 				}
 				$usergroup_query .= ')';
 			} else {
-				$usergroup_query = '(u.ID_GROUP = ' . $usergroups . ' OR u.ID_POST_GROUP = ' . $usergroups . ' OR FIND_IN_SET(' . $usergroups . ', u.additionalGroups))';
+				$usergroup_query = '(u.ID_GROUP = ' . $db->quote($usergroups) . ' OR u.ID_POST_GROUP = ' . $db->quote($usergroups) . ' OR FIND_IN_SET(' . $db->quote($usergroups) . ', u.additionalGroups))';
 			}
 			$query->where($usergroup_query);
 		}
@@ -1468,7 +1468,7 @@ HTML;
 	 */
 	function getBuffer(&$data)
 	{
-		$mainframe = Factory::getApplication();
+		$mainframe = Application::getInstance();
 		$jFusion_Route = $mainframe->input->get('jFusion_Route', null, 'raw');
 		if ($jFusion_Route) {
 			$jFusion_Route = unserialize($jFusion_Route);
@@ -1510,7 +1510,7 @@ HTML;
 
 			//destroy the Joomla session
 			$mainframe->logout();
-			Factory::getSession()->close();
+			Session::getInstance()->close();
 
 			$cookies = Factory::getCookies();
 			$cookies->addCookie($this->params->get('cookie_name'), '', 0, $this->params->get('cookie_path'), $this->params->get('cookie_domain'), $this->params->get('secure'), $this->params->get('httponly'));
@@ -1522,8 +1522,8 @@ HTML;
 		if ($action == 'login2') {
 			//uncommented out the code below, as the smf session is needed to validate the password, which can not be done unless SSI.php is required
 			//get the submitted user details
-			//$username = \JFusion\Factory::getApplication()->input->get('user');
-			//$password = \JFusion\Factory::getApplication()->input->get('hash_passwrd');
+			//$username = Application::getInstance()->input->get('user');
+			//$password = Application::getInstance()->input->get('hash_passwrd');
 			//get the userinfo directly from SMF
 			//$JFusionUser = \JFusion\Factory::getUser($this->getJname());
 			//$userinfo = $JFusionUser->getUser($username);
@@ -1673,7 +1673,7 @@ HTML;
 		static $regex_header, $replace_header;
 		if (!$regex_header || !$replace_header) {
 			$joomla_url = Factory::getParams('joomla_int')->get('source_url');
-			$baseURLnoSef = 'index.php?option=com_jfusion&Itemid=' . Factory::getApplication()->input->getInt('Itemid');
+			$baseURLnoSef = 'index.php?option=com_jfusion&Itemid=' . Application::getInstance()->input->getInt('Itemid');
 			if (substr($joomla_url, -1) == '/') {
 				$baseURLnoSef = $joomla_url . $baseURLnoSef;
 			} else {
@@ -1726,7 +1726,7 @@ HTML;
 			} else {
 				$sefmode = $this->params->get('sefmode');
 				if ($sefmode == 1) {
-					$url = JFusionFunction::routeURL($q, Factory::getApplication()->input->getInt('Itemid'));
+					$url = JFusionFunction::routeURL($q, Application::getInstance()->input->getInt('Itemid'));
 				} else {
 					//we can just append both variables
 					$url = $baseURL . $q;
@@ -1765,7 +1765,7 @@ HTML;
 		$baseURL = $this->data->baseURL;
 		//\JFusion\Framework::raise(LogLevel::WARNING, $url, $this->getJname());
 		$url = htmlspecialchars_decode($url);
-		$Itemid = Factory::getApplication()->input->getInt('Itemid');
+		$Itemid = Application::getInstance()->input->getInt('Itemid');
 		$extra = stripslashes($extra);
 		$url = str_replace(';', '&amp;', $url);
 		if (substr($baseURL, -1) != '/') {
@@ -1863,7 +1863,7 @@ HTML;
 				if (!empty($query)) {
 					$redirectURL.= '?' . $query;
 				}
-				$redirectURL = JFusionFunction::routeURL($redirectURL, Factory::getApplication()->input->getInt('Itemid'));
+				$redirectURL = JFusionFunction::routeURL($redirectURL, Application::getInstance()->input->getInt('Itemid'));
 			} else {
 				//simple SEF mode, we can just combine both variables
 				$redirectURL = $baseURL . $jfile;
@@ -1889,7 +1889,7 @@ HTML;
 		try {
 			$db = Factory::getDatabase($this->getJname());
 
-			$mainframe = Factory::getApplication();
+			$mainframe = Application::getInstance();
 			list ($board_id) = explode('.', $mainframe->input->get('board'), 1);
 			list ($topic_id) = explode('.', $mainframe->input->get('topic'), 1);
 			list ($action) = explode(';', $mainframe->input->get('action'), 1);

@@ -56,7 +56,7 @@ class User extends \JFusion\Plugin\User
 		    $query = $db->getQuery(true)
 			    ->select('a.ID_MEMBER as userid, a.memberName as username, a.realName as name, a.emailAddress as email, a.passwd as password, a.passwordSalt as password_salt, a.validation_code as activation, a.is_activated, null as reason, a.lastLogin as lastvisit, a.ID_GROUP as group_id, a.ID_POST_GROUP as postgroup, a.additionalGroups')
 			    ->from('#__members as a')
-		        ->where($identifier_type . ' = ' . $db->quote($identifier));
+		        ->where($db->quoteName($identifier_type) . ' = ' . $db->quote($identifier));
 
 		    $db->setQuery($query);
 		    $result = $db->loadObject();
@@ -171,7 +171,7 @@ class User extends \JFusion\Plugin\User
 			    //return the error
 			    throw new RuntimeException($userinfo->username);
 		    } else {
-			    $query = 'REPLACE INTO #__settings (variable, value) VALUES (\'latestMember\', ' . $resultID->ID_MEMBER . '), (\'latestRealName\', ' . $db->quote($resultName->name) . ')';
+			    $query = 'REPLACE INTO #__settings (variable, value) VALUES (\'latestMember\', ' . (int)$resultID->ID_MEMBER . '), (\'latestRealName\', ' . $db->quote($resultName->name) . ')';
 			    $db->setQuery($query);
 			    $db->execute();
 		    }

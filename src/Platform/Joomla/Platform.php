@@ -123,14 +123,12 @@ class Platform extends Joomla
      *
      * @param string $usedforums   sting coma separated with board id's
      * @param string $result_order how to order
-     * @param string $result_limit limit
      *
      * @return array
      */
-    function getActivityQuery($usedforums, $result_order, $result_limit)
+    function getActivityQuery($usedforums, $result_order)
     {
         $where = (!empty($usedforums)) ? ' WHERE b.ID_BOARD IN (' . $usedforums . ')' : '';
-        $end = $result_order . " LIMIT 0," . $result_limit;
 
         $numargs = func_num_args();
         if ($numargs > 3) {
@@ -139,7 +137,7 @@ class Platform extends Joomla
 		        $filters = func_get_args();
 		        for ($i = 3; $i < $numargs; $i++) {
 			        if ($filters[$i][0] == 'userid') {
-				        $where.= ' HAVING userid = ' . $db->quote($filters[$i][1]);
+				        $where .= ' HAVING userid = ' . $db->quote($filters[$i][1]);
 			        }
 		        }
 	        } catch (Exception $e) {
@@ -165,7 +163,7 @@ class Platform extends Joomla
                 INNER JOIN `#__messages` as b ON a.ID_FIRST_MSG = b.ID_MSG
                 INNER JOIN `#__messages` as c ON a.ID_LAST_MSG = c.ID_MSG
                 $where $guest_where)
-        ORDER BY last_post_date $end",
+        ORDER BY last_post_date $result_order",
         //LAT with latest post info
 	    self::LAT . '1' =>
         "(SELECT a.ID_TOPIC AS threadid, a.ID_LAST_MSG AS postid, b.posterName AS username, d.realName as name, b.ID_MEMBER AS userid, c.subject AS subject, b.posterTime AS dateline, a.ID_BOARD as forumid, b.posterTime as last_post_date
@@ -180,7 +178,7 @@ class Platform extends Joomla
                 INNER JOIN `#__messages` as b ON a.ID_LAST_MSG = b.ID_MSG
                 INNER JOIN `#__messages` as c ON a.ID_FIRST_MSG = c.ID_MSG
                 $where $guest_where)
-        ORDER BY last_post_date $end",
+        ORDER BY last_post_date $result_order",
         //LCT
 	    self::LCT =>
         "(SELECT a.ID_TOPIC AS threadid, b.ID_MSG AS postid, b.posterName AS username, d.realName as name, b.ID_MEMBER AS userid, b.subject AS subject, b.body, b.posterTime AS dateline, a.ID_BOARD as forumid, b.posterTime as topic_date
@@ -195,7 +193,7 @@ class Platform extends Joomla
                 INNER JOIN `#__messages` as b ON a.ID_FIRST_MSG = b.ID_MSG
                 INNER JOIN `#__messages` as c ON a.ID_LAST_MSG = c.ID_MSG
                 $where $guest_where)
-        ORDER BY topic_date $end",
+        ORDER BY topic_date $result_order",
         //LCP
 		self::LCP => "
         (SELECT b.ID_TOPIC AS threadid, b.ID_MSG AS postid, b.posterName AS username, d.realName as name, b.ID_MEMBER AS userid, b.subject AS subject, b.body, b.posterTime AS dateline, b.ID_BOARD as forumid, b.posterTime as last_post_date
@@ -208,7 +206,7 @@ class Platform extends Joomla
             FROM `#__messages` as b
             	INNER JOIN `#__topics` as a ON b.ID_TOPIC = a.ID_TOPIC
                 $where $guest_where)
-        ORDER BY last_post_date $end");
+        ORDER BY last_post_date $result_order");
         return $query;
     }
 

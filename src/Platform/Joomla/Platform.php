@@ -12,7 +12,6 @@
 use JFusion\Application\Application;
 use JFusion\Factory;
 use JFusion\Framework;
-use JFusion\Session\Session;
 use JFusion\User\Userinfo;
 use JFusion\Plugin\Platform\Joomla;
 
@@ -1454,7 +1453,7 @@ HTML;
 		 * @ignore
 		 * @var $platform \JFusion\Plugin\Platform\Joomla
 		 */
-		$platform = Factory::getPlayform('Joomla', $this->getJname());
+		$platform = Factory::getPlatform('Joomla', $this->getJname());
 		return $platform->getPostURL($post->ID_TOPIC, $post->ID_MSG);
 	}
 

@@ -1583,7 +1583,8 @@ HTML;
 			Framework::raise(LogLevel::WARNING, 'Could not find SMF in the specified directory', $this->getJname());
 		}
 		$document = JFactory::getDocument();
-		$document->addScript(JFusionFunction::getJoomlaURL() . JFUSION_PLUGIN_DIR_URL . $this->getName() . '/js/script.js');
+
+		$document->addScript($this->getUrl() . 'src/Platform/Joomla/js/script.js');
 	}
 
 	/**

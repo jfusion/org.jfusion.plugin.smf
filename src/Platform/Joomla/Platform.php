@@ -12,6 +12,7 @@
 use JFusion\Application\Application;
 use JFusion\Factory;
 use JFusion\Framework;
+use JFusion\Parser\Parser;
 use JFusion\User\Userinfo;
 use JFusion\Plugin\Platform\Joomla;
 
@@ -1072,7 +1073,8 @@ HTML;
 			}
 			$options = array();
 			$options['bbcode_patterns'] = $bbcode;
-			$text = Framework::parseCode($text, 'bbcode', $options);
+			$parser = new Parser();
+			$text = $parser->parseCode($text, 'bbcode', $options);
 		} elseif ($for == 'joomla' || ($for == 'activity' && $params->get('parse_text') == 'html')) {
 			$options = array();
 			//convert smilies so they show up in Joomla as images
@@ -1143,9 +1145,11 @@ HTML;
 				$options['html_patterns'][$bb] = array('mode' => 1, 'content' => 0, 'method' => array($this, 'parseCustomBBCode'), 'class' => $class, 'allow_in' => $allow_in);
 			}
 
-			$text = Framework::parseCode($text, 'html', $options);
+			$parser = new Parser();
+			$text = $parser->parseCode($text, 'html', $options);
 		} elseif ($for == 'search') {
-			$text = Framework::parseCode($text, 'plaintext');
+			$parser = new Parser();
+			$text = $parser->parseCode($text, 'plaintext');
 		} elseif ($for == 'activity') {
 			if ($params->get('parse_text') == 'plaintext') {
 				$options = array();
@@ -1154,7 +1158,8 @@ HTML;
 					$status['limit_applied'] = 1;
 					$options['character_limit'] = $params->get('character_limit');
 				}
-				$text = Framework::parseCode($text, 'plaintext', $options);
+				$parser = new Parser();
+				$text = $parser->parseCode($text, 'plaintext', $options);
 			}
 		}
 		return $status;

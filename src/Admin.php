@@ -307,7 +307,6 @@ class Admin extends \JFusion\Plugin\Admin
 			var usergroups = JFusion.usergroups[plugin.name];
 			var postgroups = JFusion.postgroups[plugin.name];
 
-
 			var root = $('<div></div>');
 
 			// render default group
@@ -354,8 +353,6 @@ class Admin extends \JFusion\Plugin\Admin
     		root.append(postgroupsselect);
 
 
-
-
 			// render default member groups
 			root.append($('<div>' + JFusion.Text._('MEMBERGROUPS') + '</div>'));
 
@@ -376,7 +373,6 @@ class Admin extends \JFusion\Plugin\Admin
 
 					membergroupsselect.append(options);
     			}
-
     		});
 
 		    root.append(membergroupsselect);

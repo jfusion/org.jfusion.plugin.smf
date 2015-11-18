@@ -601,7 +601,7 @@ class Platform extends Joomla
 	    $text = $this->prepareFirstPostBody($dbparams, $contentitem);
 
 	    $timestamp = time();
-	    $userid = $dbparams->get('default_user');
+	    $userid = $dbparams->get('default_userid');
 
 	    $query = $db->getQuery(true)
 		    ->select('memberName')
